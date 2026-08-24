@@ -99,7 +99,7 @@ export default function BusinessProfile() {
         navigate('/dashboard');
       }
     } catch (err: any) {
-      const errorMsg = err.response?.data?.[0] || err.response?.data?.detail || 'Error creating booking. Slot might be taken.';
+      const errorMsg = err.response?.data?.error || err.response?.data?.[0] || err.response?.data?.detail || 'Error creating booking. Slot might be taken.';
       setBookingError(errorMsg);
       toast.error(errorMsg, { id: toastId });
     }

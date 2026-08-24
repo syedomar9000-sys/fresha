@@ -175,8 +175,11 @@ class CheckoutSessionView(APIView):
             return Response({"error": "Missing parameters"}, status=status.HTTP_400_BAD_REQUEST)
             
         from .services import PaymentService
-        url = PaymentService.create_checkout_session(request.user, appointment_id, success_url, cancel_url)
-        return Response({'url': url})
+        try:
+            url = PaymentService.create_checkout_session(request.user, appointment_id, success_url, cancel_url)
+            return Response({'url': url})
+        except Exception as e:
+            return Response({"error": f"Payment system error: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
 
 class StripeWebhookView(APIView):
     permission_classes = [AllowAny]
