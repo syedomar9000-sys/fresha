@@ -195,7 +195,15 @@ export default function BusinessDashboard() {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-300 mb-1">URL Slug</label>
-                    <input required value={slug} onChange={e => setSlug(e.target.value)} className="w-full p-2.5 bg-[#101113] border border-[#2C2D30] rounded-lg focus:border-[#635BFF] outline-none text-white" />
+                    <input required value={slug} onChange={e => setSlug(e.target.value)} placeholder="no-spaces-allowed" className="w-full p-2.5 bg-[#101113] border border-[#2C2D30] rounded-lg focus:border-[#635BFF] outline-none text-white" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-1">City</label>
+                    <input required value={city} onChange={e => setCity(e.target.value)} placeholder="e.g. New York" className="w-full p-2.5 bg-[#101113] border border-[#2C2D30] rounded-lg focus:border-[#635BFF] outline-none text-white" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-1">Address</label>
+                    <input required value={address} onChange={e => setAddress(e.target.value)} placeholder="e.g. 123 Main St" className="w-full p-2.5 bg-[#101113] border border-[#2C2D30] rounded-lg focus:border-[#635BFF] outline-none text-white" />
                   </div>
                 </div>
                 <div>
