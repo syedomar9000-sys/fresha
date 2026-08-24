@@ -88,12 +88,20 @@ export default function BusinessProfile() {
       const appointment = res.data;
       if (appointment.status === 'PENDING_PAYMENT') {
         toast.loading('Redirecting to payment...', { id: toastId });
-        const checkoutRes = await api.post('/payments/checkout-session', {
-          appointment_id: appointment.id,
-          success_url: `${window.location.origin}/booking/success`,
-          cancel_url: `${window.location.origin}/booking/cancel`
-        });
-        window.location.href = checkoutRes.data.url;
+        try {
+          const checkoutRes = await api.post('/payments/checkout-session', {
+            appointment_id: appointment.id,
+            success_url: `${window.location.origin}/booking/success`,
+            cancel_url: `${window.location.origin}/booking/cancel`
+          });
+          window.location.href = checkoutRes.data.url;
+        } catch (paymentErr: any) {
+          toast.success('Appointment booked successfully!', { id: toastId });
+          setBookingError('Payment system is not set up yet. Your appointment is saved as unpaid.');
+          // Refresh slots so the booked one disappears
+          const slotsRes = await api.get(`/appointments/availability/${selectedService?.id}?date=${selectedDate}`);
+          setAvailableSlots(slotsRes.data);
+        }
       } else {
         toast.success('Your booking has been confirmed successfully.', { id: toastId });
         navigate('/dashboard');
@@ -102,6 +110,9 @@ export default function BusinessProfile() {
       const errorMsg = err.response?.data?.error || err.response?.data?.[0] || err.response?.data?.detail || 'Error creating booking. Slot might be taken.';
       setBookingError(errorMsg);
       toast.error(errorMsg, { id: toastId });
+      // Also refresh slots just in case
+      const slotsRes = await api.get(`/appointments/availability/${selectedService?.id}?date=${selectedDate}`);
+      setAvailableSlots(slotsRes.data);
     }
   };
 
